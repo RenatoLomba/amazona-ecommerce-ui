@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import Head from 'next/head';
 import { AppBar, Container, Toolbar, Typography } from '@material-ui/core';
+import { useStyles } from '../styles/styles';
 
 type LayoutProps = {
   children: ReactElement;
@@ -8,18 +9,20 @@ type LayoutProps = {
 };
 
 export const Layout = ({ pageTitle, children }: LayoutProps) => {
+  const { navbar, main, footer } = useStyles();
+
   return (
     <div>
       <Head>
         <title>Amazona - {pageTitle}</title>
       </Head>
-      <AppBar position="static">
+      <AppBar className={navbar} position="static">
         <Toolbar>
           <Typography>amazona</Typography>
         </Toolbar>
       </AppBar>
-      <Container>{children}</Container>
-      <footer>
+      <Container className={main}>{children}</Container>
+      <footer className={footer}>
         <Typography>All rights reserved. Amazona.</Typography>
       </footer>
     </div>

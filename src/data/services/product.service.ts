@@ -10,6 +10,15 @@ class ProductService {
 
     return data;
   }
+
+  async product(slug: string): Promise<Product> {
+    const res = await fetch(`${API_URL}/products/${slug}`);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    return data;
+  }
 }
 
 const productService = new ProductService();

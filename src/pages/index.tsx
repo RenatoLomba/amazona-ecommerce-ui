@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GetStaticProps } from 'next';
+import NextLink from 'next/link';
 import {
   Button,
   Card,
@@ -20,7 +21,7 @@ type HomeProps = {
   error?: string;
 };
 
-export default function Home({ products, error }: HomeProps) {
+export default function Home({ products }: HomeProps) {
   const [productsList] = useState(products);
 
   return (
@@ -31,16 +32,18 @@ export default function Home({ products, error }: HomeProps) {
           {productsList.map((product) => (
             <Grid item md={4} key={product._id}>
               <Card>
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    image={product.image}
-                    title={product.name}
-                  ></CardMedia>
-                  <CardContent>
-                    <Typography>{product.name}</Typography>
-                  </CardContent>
-                </CardActionArea>
+                <NextLink href={`/product/${product.slug}`} passHref>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      image={product.image}
+                      title={product.name}
+                    ></CardMedia>
+                    <CardContent>
+                      <Typography>{product.name}</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </NextLink>
                 <CardActions>
                   <Typography>${product.price}</Typography>
                   <Button size="small" color="primary">
@@ -65,7 +68,7 @@ export const getStaticProps: GetStaticProps = async () => {
     };
   } catch (error) {
     return {
-      props: { error: error.response.data.message },
+      props: { error: error.message },
     };
   }
 };

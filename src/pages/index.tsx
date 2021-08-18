@@ -1,20 +1,74 @@
-import React from 'react';
-import type { NextPage } from 'next';
-import { Layout } from '../components/Layout';
+import React, { useState } from 'react';
+import { GetStaticProps } from 'next';
+import NextLink from 'next/link';
+import {
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 
-const Home: NextPage = () => {
+import { Layout } from '../components/Layout';
+import { productService } from '../data/services/product.service';
+import { Product } from '../data/entities/product.entity';
+
+type HomeProps = {
+  products: Product[];
+  error?: string;
+};
+
+export default function Home({ products }: HomeProps) {
+  const [productsList] = useState(products);
+
   return (
     <Layout pageTitle="See our products">
       <div>
         <h1>Products</h1>
-        <ul>
-          <li>Product 1</li>
-          <li>Product 2</li>
-          <li>Product 3</li>
-        </ul>
+        <Grid container spacing={3}>
+          {productsList.map((product) => (
+            <Grid item md={4} key={product._id}>
+              <Card>
+                <NextLink href={`/product/${product.slug}`} passHref>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      image={product.image}
+                      title={product.name}
+                    ></CardMedia>
+                    <CardContent>
+                      <Typography>{product.name}</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </NextLink>
+                <CardActions>
+                  <Typography>${product.price}</Typography>
+                  <Button size="small" color="primary">
+                    Add to cart
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </div>
     </Layout>
   );
-};
+}
 
-export default Home;
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const products = await productService.products();
+    return {
+      props: { products },
+      revalidate: 60 * 5,
+    };
+  } catch (error) {
+    return {
+      props: { error: error.message },
+    };
+  }
+};

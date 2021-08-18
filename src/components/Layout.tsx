@@ -6,12 +6,15 @@ import {
   Container,
   CssBaseline,
   Link,
+  Switch,
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 import { useStyles } from '../styles/styles';
+import { createDefaultTheme } from '../styles/create-theme';
+import { useTheme } from '../hooks/useTheme';
 
 type LayoutProps = {
   children: ReactElement;
@@ -20,33 +23,9 @@ type LayoutProps = {
 };
 
 export const Layout = ({ pageTitle, description, children }: LayoutProps) => {
-  const theme = createTheme({
-    typography: {
-      h1: {
-        fontSize: '1.6rem',
-        fontweight: 400,
-        margin: '1rem 0',
-      },
-      h2: {
-        fontSize: '1.4rem',
-        fontweight: 400,
-        margin: '1rem 0',
-      },
-      body1: {
-        fontWeight: 'normal',
-      },
-    },
-    palette: {
-      type: 'light',
-      primary: {
-        main: '#f0c000',
-      },
-      secondary: {
-        main: '#208080',
-      },
-    },
-  });
+  const { darkMode, toggleDarkMode } = useTheme();
   const { navbar, main, footer, brand, grow } = useStyles();
+  const theme = createDefaultTheme(darkMode);
 
   return (
     <div>
@@ -65,6 +44,7 @@ export const Layout = ({ pageTitle, description, children }: LayoutProps) => {
             </NextLink>
             <div className={grow}></div>
             <div>
+              <Switch checked={darkMode} onChange={toggleDarkMode} />
               <NextLink href="/cart" passHref>
                 <Link>Cart</Link>
               </NextLink>

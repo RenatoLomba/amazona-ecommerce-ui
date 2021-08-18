@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
+import { ThemeContextProvider } from '../contexts/theme/theme-provider';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -9,6 +10,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       jssStyles?.parentElement?.removeChild(jssStyles);
     }
   }, []);
-  return <Component {...pageProps} />;
+  return (
+    <ThemeContextProvider>
+      <Component {...pageProps} />
+    </ThemeContextProvider>
+  );
 }
 export default MyApp;

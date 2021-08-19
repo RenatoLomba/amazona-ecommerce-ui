@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import NextLink from 'next/link';
 import Image from 'next/image';
@@ -16,6 +16,8 @@ import { Layout } from '../../components/Layout';
 import { Product } from '../../data/entities/product.entity';
 import { productService } from '../../data/services/product.service';
 import { useStyles } from '../../styles/styles';
+import { useCart } from '../../hooks/useCart';
+import { useRouter } from 'next/dist/client/router';
 
 type ProductDetailsProps = {
   product: Product;
@@ -26,6 +28,8 @@ export default function ProductDetails({
   product,
   error,
 }: ProductDetailsProps) {
+  const router = useRouter();
+  const { addToCart } = useCart();
   const { section } = useStyles();
 
   return (
@@ -105,7 +109,15 @@ export default function ProductDetails({
                     </Grid>
                   </ListItem>
                   <ListItem>
-                    <Button fullWidth variant="contained" color="primary">
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        addToCart(product, 1);
+                        router.push('/cart');
+                      }}
+                    >
                       Add to cart
                     </Button>
                   </ListItem>

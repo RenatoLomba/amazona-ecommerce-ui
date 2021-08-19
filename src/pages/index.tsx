@@ -15,6 +15,8 @@ import {
 import { Layout } from '../components/Layout';
 import { productService } from '../data/services/product.service';
 import { Product } from '../data/entities/product.entity';
+import { useCart } from '../hooks/useCart';
+import { useRouter } from 'next/dist/client/router';
 
 type HomeProps = {
   products: Product[];
@@ -22,6 +24,8 @@ type HomeProps = {
 };
 
 export default function Home({ products }: HomeProps) {
+  const router = useRouter();
+  const { addToCart } = useCart();
   const [productsList] = useState(products);
 
   return (
@@ -46,9 +50,20 @@ export default function Home({ products }: HomeProps) {
                 </NextLink>
                 <CardActions>
                   <Typography>${product.price}</Typography>
-                  <Button size="small" color="primary">
-                    Add to cart
-                  </Button>
+                  {product.countInStock > 0 ? (
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => {
+                        addToCart(product, 1);
+                        router.push('/cart');
+                      }}
+                    >
+                      Add to cart
+                    </Button>
+                  ) : (
+                    <Typography color="error">Out of stock</Typography>
+                  )}
                 </CardActions>
               </Card>
             </Grid>

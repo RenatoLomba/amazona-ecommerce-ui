@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 import { ThemeContextProvider } from '../contexts/theme/theme-provider';
+import { CartContextProvider } from '../contexts/cart/cart-provider';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -11,9 +12,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, []);
   return (
-    <ThemeContextProvider>
-      <Component {...pageProps} />
-    </ThemeContextProvider>
+    <CartContextProvider>
+      <ThemeContextProvider>
+        <Component {...pageProps} />
+      </ThemeContextProvider>
+    </CartContextProvider>
   );
 }
 export default MyApp;

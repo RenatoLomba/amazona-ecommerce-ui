@@ -3,6 +3,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import {
   AppBar,
+  Badge,
   Container,
   CssBaseline,
   Link,
@@ -15,6 +16,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { useStyles } from '../styles/styles';
 import { createDefaultTheme } from '../styles/create-theme';
 import { useTheme } from '../hooks/useTheme';
+import { useCart } from '../hooks/useCart';
 
 type LayoutProps = {
   children: ReactElement;
@@ -24,6 +26,7 @@ type LayoutProps = {
 
 export const Layout = ({ pageTitle, description, children }: LayoutProps) => {
   const { darkMode, toggleDarkMode } = useTheme();
+  const { items } = useCart();
   const { navbar, main, footer, brand, grow } = useStyles();
   const theme = createDefaultTheme(darkMode);
 
@@ -46,7 +49,15 @@ export const Layout = ({ pageTitle, description, children }: LayoutProps) => {
             <div>
               <Switch checked={darkMode} onChange={toggleDarkMode} />
               <NextLink href="/cart" passHref>
-                <Link>Cart</Link>
+                <Link>
+                  {items.length > 0 ? (
+                    <Badge badgeContent={items.length} color="secondary">
+                      Cart
+                    </Badge>
+                  ) : (
+                    'Cart'
+                  )}
+                </Link>
               </NextLink>
               <NextLink href="/login" passHref>
                 <Link>Login</Link>

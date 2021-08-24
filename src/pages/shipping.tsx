@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import { useUser } from '../hooks/useUser';
 
 export default function Shipping() {

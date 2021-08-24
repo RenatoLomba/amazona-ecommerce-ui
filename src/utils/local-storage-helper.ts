@@ -8,4 +8,7 @@ export const localStorageHelper = {
   set: (param: string, item: any): void => {
     localStorage.setItem(param, JSON.stringify(item));
   },
+  remove: (param: string): void => {
+    localStorage.removeItem(param);
+  },
 };

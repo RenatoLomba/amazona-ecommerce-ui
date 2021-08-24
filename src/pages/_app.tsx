@@ -3,6 +3,8 @@ import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 import { ThemeContextProvider } from '../contexts/theme/theme-provider';
 import { CartContextProvider } from '../contexts/cart/cart-provider';
+import { UserContextProvider } from '../contexts/user/user-provider';
+import { SnackbarProvider } from 'notistack';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -12,11 +14,17 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, []);
   return (
-    <CartContextProvider>
-      <ThemeContextProvider>
-        <Component {...pageProps} />
-      </ThemeContextProvider>
-    </CartContextProvider>
+    <UserContextProvider>
+      <CartContextProvider>
+        <SnackbarProvider
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <ThemeContextProvider>
+            <Component {...pageProps} />
+          </ThemeContextProvider>
+        </SnackbarProvider>
+      </CartContextProvider>
+    </UserContextProvider>
   );
 }
 export default MyApp;

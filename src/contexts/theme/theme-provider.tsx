@@ -1,14 +1,8 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import nookies from 'nookies';
 import { ThemeContext } from '.';
 
-type ThemeContextProviderProps = {
-  children: ReactNode;
-};
-
-export const ThemeContextProvider = ({
-  children,
-}: ThemeContextProviderProps) => {
+export const ThemeContextProvider: FC = ({ children }) => {
   const [darkMode, setDarkMode] = useState(false);
 
   const toggleDarkMode = () => {

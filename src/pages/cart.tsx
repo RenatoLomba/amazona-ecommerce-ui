@@ -20,9 +20,16 @@ import {
 } from '@material-ui/core';
 import { Layout } from '../components/Layout';
 import { useCart } from '../hooks/useCart';
+import { useRouter } from 'next/dist/client/router';
 
 export default function Cart() {
+  const router = useRouter();
   const { items, updateProductQty, deleteFromCart } = useCart();
+
+  const checkOutHandler = () => {
+    router.push(`/shipping`);
+  };
+
   return (
     <Layout pageTitle="Your cart">
       <>
@@ -120,7 +127,12 @@ export default function Cart() {
                     </Typography>
                   </ListItem>
                   <ListItem>
-                    <Button variant="contained" color="primary" fullWidth>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      onClick={checkOutHandler}
+                    >
                       Check Out
                     </Button>
                   </ListItem>

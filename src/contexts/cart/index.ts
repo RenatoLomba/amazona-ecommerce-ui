@@ -7,6 +7,7 @@ type CartContextData = {
   addToCart: (product: Product, qty: number) => void;
   updateProductQty: (productId: string, newQty: number) => void;
   deleteFromCart: (productId: string) => void;
+  cleanCart: () => void;
 };
 
 export const CartContext = createContext({} as CartContextData);

@@ -1,14 +1,21 @@
 import React, { FC, useEffect, useState } from 'react';
+import nookies from 'nookies';
 import { CartContext } from '.';
 import { CartItem } from '../../data/entities/cart-item.entity';
 import { Product } from '../../data/entities/product.entity';
-import { localStorageHelper } from '../../utils/local-storage-helper';
+import { ShippingAddress } from '../../data/entities/shipping-address';
 
 export const CartContextProvider: FC = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>();
+
+  const changeAddress = (address: ShippingAddress) => {
+    nookies.set(null, 'SHIPPING_ADDRESS', JSON.stringify(address));
+    setShippingAddress(address);
+  };
 
   const changeCartItems = (newCartItems: CartItem[]) => {
-    localStorageHelper.set('cart-items', newCartItems);
+    nookies.set(null, 'CART_ITEMS', JSON.stringify(newCartItems));
     setItems(newCartItems);
   };
 
@@ -57,19 +64,38 @@ export const CartContextProvider: FC = ({ children }) => {
   };
 
   const cleanCart = () => {
-    localStorageHelper.remove('cart-items');
+    nookies.destroy(null, 'CART_ITEMS');
     setItems([]);
   };
 
   useEffect(() => {
-    const cartItems = localStorageHelper.get<CartItem[]>('cart-items');
-    if (!cartItems) return;
-    setItems(cartItems);
+    const getStoredItems = () => {
+      const { CART_ITEMS } = nookies.get(null);
+      if (!CART_ITEMS) return;
+      setItems(JSON.parse(CART_ITEMS));
+    };
+
+    const getStoredAddress = () => {
+      const { SHIPPING_ADDRESS } = nookies.get(null);
+      if (!SHIPPING_ADDRESS) return;
+      setShippingAddress(JSON.parse(SHIPPING_ADDRESS));
+    };
+
+    getStoredItems();
+    getStoredAddress();
   }, []);
 
   return (
     <CartContext.Provider
-      value={{ items, addToCart, updateProductQty, deleteFromCart, cleanCart }}
+      value={{
+        items,
+        addToCart,
+        updateProductQty,
+        deleteFromCart,
+        cleanCart,
+        changeAddress,
+        shippingAddress,
+      }}
     >
       {children}
     </CartContext.Provider>

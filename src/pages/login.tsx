@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { Layout } from '../components/Layout';
 import { useStyles } from '../styles/styles';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import { userService } from '../data/services/user.service';
 import { useUser } from '../hooks/useUser';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';

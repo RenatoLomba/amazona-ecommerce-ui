@@ -16,7 +16,7 @@ import { Layout } from '../components/Layout';
 import { productService } from '../data/services/product.service';
 import { Product } from '../data/entities/product.entity';
 import { useCart } from '../hooks/useCart';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 
 type HomeProps = {
   products: Product[];

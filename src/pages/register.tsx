@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import { Layout } from '../components/Layout';
 import { useUser } from '../hooks/useUser';
 import { useStyles } from '../styles/styles';

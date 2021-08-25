@@ -17,7 +17,7 @@ import { Product } from '../../data/entities/product.entity';
 import { productService } from '../../data/services/product.service';
 import { useStyles } from '../../styles/styles';
 import { useCart } from '../../hooks/useCart';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 
 type ProductDetailsProps = {
   product: Product;

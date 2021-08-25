@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core';
 import { Layout } from '../components/Layout';
 import { useCart } from '../hooks/useCart';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 
 export default function Cart() {
   const router = useRouter();

@@ -11,6 +11,8 @@ type CartContextData = {
   cleanCart: () => void;
   shippingAddress?: ShippingAddress;
   changeAddress: (address: ShippingAddress) => void;
+  paymentMethod?: string;
+  savePaymentMethod: (paymentMethod: string) => void;
 };
 
 export const CartContext = createContext({} as CartContextData);

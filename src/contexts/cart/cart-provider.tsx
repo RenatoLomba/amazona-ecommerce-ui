@@ -8,6 +8,7 @@ import { ShippingAddress } from '../../data/entities/shipping-address';
 export const CartContextProvider: FC = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>();
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const changeAddress = (address: ShippingAddress) => {
     nookies.set(null, 'SHIPPING_ADDRESS', JSON.stringify(address));
@@ -68,6 +69,11 @@ export const CartContextProvider: FC = ({ children }) => {
     setItems([]);
   };
 
+  const savePaymentMethod = (paymentMethod: string) => {
+    nookies.set(null, 'PAYMENT_METHOD', paymentMethod);
+    setPaymentMethod(paymentMethod);
+  };
+
   useEffect(() => {
     const getStoredItems = () => {
       const { CART_ITEMS } = nookies.get(null);
@@ -81,8 +87,15 @@ export const CartContextProvider: FC = ({ children }) => {
       setShippingAddress(JSON.parse(SHIPPING_ADDRESS));
     };
 
+    const getPaymentMethod = () => {
+      const { PAYMENT_METHOD } = nookies.get(null);
+      if (!PAYMENT_METHOD) return;
+      setPaymentMethod(PAYMENT_METHOD);
+    };
+
     getStoredItems();
     getStoredAddress();
+    getPaymentMethod();
   }, []);
 
   return (
@@ -95,6 +108,8 @@ export const CartContextProvider: FC = ({ children }) => {
         cleanCart,
         changeAddress,
         shippingAddress,
+        savePaymentMethod,
+        paymentMethod,
       }}
     >
       {children}

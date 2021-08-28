@@ -8,7 +8,7 @@ type CartContextData = {
   addToCart: (product: Product, qty: number) => void;
   updateProductQty: (productId: string, newQty: number) => void;
   deleteFromCart: (productId: string) => void;
-  cleanCart: () => void;
+  clearCart: () => void;
   shippingAddress?: ShippingAddress;
   changeAddress: (address: ShippingAddress) => void;
   paymentMethod?: string;

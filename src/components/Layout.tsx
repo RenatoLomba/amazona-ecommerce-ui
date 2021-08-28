@@ -35,7 +35,7 @@ export const Layout: FC<LayoutProps> = ({
 }) => {
   const router = useRouter();
   const { darkMode, toggleDarkMode } = useTheme();
-  const { items, cleanCart } = useCart();
+  const { items, clearCart } = useCart();
   const { loggedUser, logoutUser } = useUser();
   const { navbar, main, footer, brand, grow, navbarButton } = useStyles();
   const theme = createDefaultTheme(darkMode);
@@ -52,7 +52,7 @@ export const Layout: FC<LayoutProps> = ({
 
   const logoutHandler = () => {
     setAnchorEl(undefined);
-    cleanCart();
+    clearCart();
 
     logoutUser();
 

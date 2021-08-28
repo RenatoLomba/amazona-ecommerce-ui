@@ -6,6 +6,7 @@ import nookies from 'nookies';
 import {
   Button,
   Card,
+  CircularProgress,
   Grid,
   Link,
   List,
@@ -26,11 +27,17 @@ import { useRouter } from 'next/router';
 import { useCart } from '../hooks/useCart';
 import { useStyles } from '../styles/styles';
 import { CheckOutWizard } from '../components/CheckOutWizard';
+import { useSnackbar } from 'notistack';
+import { getError } from '../utils/error';
+import { useState } from 'react';
+import { orderService } from '../data/services/order.service';
 
 export default function PlaceOrder() {
   const router = useRouter();
   const { section } = useStyles();
-  const { items, shippingAddress, paymentMethod } = useCart();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { items, shippingAddress, paymentMethod, clearCart } = useCart();
+  const [loading, setLoading] = useState(false);
 
   const roundTwo = (num: number) =>
     Math.round(num * 100 + Number.EPSILON) / 100;
@@ -41,6 +48,39 @@ export default function PlaceOrder() {
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
   const taxPrice = roundTwo(itemsPrice * 0.15);
   const totalPrice = roundTwo(itemsPrice + shippingPrice + taxPrice);
+
+  const placeOrderHandler = async () => {
+    closeSnackbar();
+
+    try {
+      setLoading(true);
+
+      if (!paymentMethod || !shippingAddress) return;
+
+      const order = await orderService.saveOrder({
+        itemsPrice,
+        orderItems: items.map(({ product, qty }) => ({
+          image: product.image,
+          name: product.name,
+          price: product.price,
+          qty,
+        })),
+        paymentMethod,
+        shippingAddress,
+        shippingPrice,
+        taxPrice,
+        totalPrice,
+      });
+
+      clearCart();
+
+      router.push(`/order/${order._id}`);
+    } catch (err) {
+      enqueueSnackbar(getError(err), { variant: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Layout pageTitle="Placeorder">
@@ -60,8 +100,8 @@ export default function PlaceOrder() {
               <ListItem>
                 {shippingAddress && (
                   <Typography>
-                    {shippingAddress.fullName},{shippingAddress.address},
-                    {shippingAddress.city},{shippingAddress.postalCode},
+                    {shippingAddress.fullName}, {shippingAddress.address},{' '}
+                    {shippingAddress.city}, {shippingAddress.postalCode},{' '}
                     {shippingAddress.country}
                   </Typography>
                 )}
@@ -192,10 +232,20 @@ export default function PlaceOrder() {
                 </Grid>
               </ListItem>
               <ListItem>
-                <Button variant="contained" color="primary" fullWidth>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={placeOrderHandler}
+                >
                   Place Order
                 </Button>
               </ListItem>
+              {loading && (
+                <ListItem>
+                  <CircularProgress />
+                </ListItem>
+              )}
             </List>
           </Card>
         </Grid>

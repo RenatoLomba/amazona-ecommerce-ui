@@ -64,7 +64,7 @@ export const CartContextProvider: FC = ({ children }) => {
     changeCartItems(newCartItems);
   };
 
-  const cleanCart = () => {
+  const clearCart = () => {
     nookies.destroy(null, 'CART_ITEMS');
     setItems([]);
   };
@@ -105,7 +105,7 @@ export const CartContextProvider: FC = ({ children }) => {
         addToCart,
         updateProductQty,
         deleteFromCart,
-        cleanCart,
+        clearCart,
         changeAddress,
         shippingAddress,
         savePaymentMethod,

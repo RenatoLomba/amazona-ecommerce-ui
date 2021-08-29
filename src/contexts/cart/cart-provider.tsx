@@ -66,7 +66,11 @@ export const CartContextProvider: FC = ({ children }) => {
 
   const clearCart = () => {
     nookies.destroy(null, 'CART_ITEMS');
+    nookies.destroy(null, 'SHIPPING_ADDRESS');
+    nookies.destroy(null, 'PAYMENT_METHOD');
     setItems([]);
+    setShippingAddress(undefined);
+    setPaymentMethod('');
   };
 
   const savePaymentMethod = (paymentMethod: string) => {

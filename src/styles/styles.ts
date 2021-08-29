@@ -37,6 +37,9 @@ const useStyles = makeStyles({
     marginTop: 10,
     textAlign: 'center',
   },
+  error: {
+    color: '#f04040',
+  },
 });
 
 export { useStyles };

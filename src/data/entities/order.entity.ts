@@ -8,6 +8,11 @@ export type Order = {
   user: string;
   orderItems: OrderItem[];
   shippingAddress: ShippingAddress;
+  paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
   paidAt?: Date;
   deliveredAt?: Date;
 };

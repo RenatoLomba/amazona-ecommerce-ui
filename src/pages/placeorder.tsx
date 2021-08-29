@@ -63,6 +63,7 @@ export default function PlaceOrder() {
           image: product.image,
           name: product.name,
           price: product.price,
+          slug: product.slug,
           qty,
         })),
         paymentMethod,

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import nookies from 'nookies';
 import {
   Card,
+  CircularProgress,
   Grid,
   Link,
   List,
@@ -17,26 +18,74 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+import axios from 'axios';
+import {
+  PayPalButtons,
+  ScriptReducerAction,
+  usePayPalScriptReducer,
+} from '@paypal/react-paypal-js';
 
 import { Layout } from '../../components/Layout';
 import { userService } from '../../data/services/user.service';
 import { useStyles } from '../../styles/styles';
-import { CheckOutWizard } from '../../components/CheckOutWizard';
 import { getError } from '../../utils/error';
 import { orderService } from '../../data/services/order.service';
 import { Order } from '../../data/entities/order.entity';
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 
 type OrderDetailsProps = {
   order?: Order;
   error?: string;
 };
 
-export default function OrderDetails({ order, error }: OrderDetailsProps) {
-  const { error: errorStyle, section } = useStyles();
+export default function OrderDetails({
+  order: orderBackend,
+  error,
+}: OrderDetailsProps) {
+  const { error: errorStyle, section, fullWidth } = useStyles();
+  const [{ isPending, options }, paypalDispatch] = usePayPalScriptReducer();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [order, setOrder] = useState(orderBackend);
+
+  useEffect(() => {
+    console.log(options['client-id']);
+  }, [options]);
+
+  useEffect(() => {
+    if (order && !error) {
+      const loadPaypalScript = async () => {
+        closeSnackbar();
+
+        const { USER_TOKEN } = nookies.get(null);
+        if (!USER_TOKEN) return;
+
+        try {
+          const { data: clientId } = await axios.get('/api/keys/paypal', {
+            headers: { Authorization: 'Bearer ' + USER_TOKEN },
+          });
+
+          const resetOptionsDispatcher = {
+            type: 'resetOptions',
+            value: { 'client-id': clientId, currency: 'USD' },
+          };
+          paypalDispatch(resetOptionsDispatcher as ScriptReducerAction);
+
+          const setLoadingStatusDispatcher = {
+            type: 'setLoadingStatus',
+            value: 'pending',
+          };
+          paypalDispatch(setLoadingStatusDispatcher as ScriptReducerAction);
+        } catch (err) {
+          enqueueSnackbar(getError(err), { variant: 'error' });
+        }
+      };
+      loadPaypalScript();
+    }
+  }, []);
 
   return (
     <Layout pageTitle={`Order ${order ? order._id : 'Not Found'}`}>
-      <CheckOutWizard activeStep={3} />
       <Typography component="h1" variant="h1">
         Order {order ? order._id : 'Not Found'}
       </Typography>
@@ -91,7 +140,7 @@ export default function OrderDetails({ order, error }: OrderDetailsProps) {
                     <ListItem>
                       <Typography>Status:</Typography>
                       {order.isPaid ? (
-                        `paid at {order.paidAt?.toString()}`
+                        `paid at ${order.paidAt?.toString()}`
                       ) : (
                         <Typography className={errorStyle}>
                           &nbsp;not paid
@@ -222,6 +271,35 @@ export default function OrderDetails({ order, error }: OrderDetailsProps) {
                         </Grid>
                       </Grid>
                     </ListItem>
+                    {!order.isPaid && (
+                      <ListItem>
+                        {isPending ? (
+                          <CircularProgress />
+                        ) : (
+                          <div className={fullWidth}>
+                            <PayPalButtons
+                              onClick={async () => {
+                                try {
+                                  closeSnackbar();
+                                  const orderPaid = await orderService.payOrder(
+                                    order._id,
+                                  );
+                                  setOrder(orderPaid);
+                                  enqueueSnackbar('Order is paid', {
+                                    variant: 'success',
+                                  });
+                                } catch (err) {
+                                  console.log(err);
+                                  enqueueSnackbar(getError(err), {
+                                    variant: 'error',
+                                  });
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                      </ListItem>
+                    )}
                   </List>
                 </Card>
               </Grid>

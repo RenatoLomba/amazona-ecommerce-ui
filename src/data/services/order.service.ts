@@ -11,7 +11,7 @@ class OrderService {
 
     order.shippingPrice =
       order.shippingPrice === 0 || order.shippingPrice < 0
-        ? 0.1
+        ? 0.01
         : order.shippingPrice;
 
     const res = await fetch(`${API_URL}/orders`, {
@@ -39,6 +39,22 @@ class OrderService {
       headers: {
         Authorization: 'Bearer ' + token || USER_TOKEN,
       },
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    return data;
+  }
+
+  async payOrder(id: string): Promise<Order> {
+    const { USER_TOKEN } = nookies.get(null);
+
+    if (!USER_TOKEN) throw new Error('Unauthorized request');
+
+    const res = await fetch(`${API_URL}/orders/${id}/pay`, {
+      method: 'PUT',
+      headers: { Authorization: 'Bearer ' + USER_TOKEN },
     });
     const data = await res.json();
 

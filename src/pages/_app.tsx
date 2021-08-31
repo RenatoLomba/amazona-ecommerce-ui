@@ -1,10 +1,18 @@
 import React, { useEffect } from 'react';
 import type { AppProps } from 'next/app';
+import { SnackbarProvider } from 'notistack';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+
 import '../styles/globals.css';
 import { ThemeContextProvider } from '../contexts/theme/theme-provider';
 import { CartContextProvider } from '../contexts/cart/cart-provider';
 import { UserContextProvider } from '../contexts/user/user-provider';
-import { SnackbarProvider } from 'notistack';
+
+const paypalInitialOptions = {
+  'client-id': 'test',
+  currency: 'USD',
+  intent: 'capture',
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -20,7 +28,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <ThemeContextProvider>
-            <Component {...pageProps} />
+            <PayPalScriptProvider
+              options={paypalInitialOptions}
+              deferLoading={true}
+            >
+              <Component {...pageProps} />
+            </PayPalScriptProvider>
           </ThemeContextProvider>
         </SnackbarProvider>
       </CartContextProvider>

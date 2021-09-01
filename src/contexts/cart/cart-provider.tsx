@@ -1,14 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
+import nookies from 'nookies';
 import { CartContext } from '.';
 import { CartItem } from '../../data/entities/cart-item.entity';
 import { Product } from '../../data/entities/product.entity';
-import { localStorageHelper } from '../../utils/local-storage-helper';
+import { ShippingAddress } from '../../data/entities/shipping-address';
 
 export const CartContextProvider: FC = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>();
+  const [paymentMethod, setPaymentMethod] = useState('');
+
+  const changeAddress = (address: ShippingAddress) => {
+    nookies.set(null, 'SHIPPING_ADDRESS', JSON.stringify(address));
+    setShippingAddress(address);
+  };
 
   const changeCartItems = (newCartItems: CartItem[]) => {
-    localStorageHelper.set('cart-items', newCartItems);
+    nookies.set(null, 'CART_ITEMS', JSON.stringify(newCartItems));
     setItems(newCartItems);
   };
 
@@ -56,20 +64,57 @@ export const CartContextProvider: FC = ({ children }) => {
     changeCartItems(newCartItems);
   };
 
-  const cleanCart = () => {
-    localStorageHelper.remove('cart-items');
+  const clearCart = () => {
+    nookies.destroy(null, 'CART_ITEMS');
+    nookies.destroy(null, 'SHIPPING_ADDRESS');
+    nookies.destroy(null, 'PAYMENT_METHOD');
     setItems([]);
+    setShippingAddress(undefined);
+    setPaymentMethod('');
+  };
+
+  const savePaymentMethod = (paymentMethod: string) => {
+    nookies.set(null, 'PAYMENT_METHOD', paymentMethod);
+    setPaymentMethod(paymentMethod);
   };
 
   useEffect(() => {
-    const cartItems = localStorageHelper.get<CartItem[]>('cart-items');
-    if (!cartItems) return;
-    setItems(cartItems);
+    const getStoredItems = () => {
+      const { CART_ITEMS } = nookies.get(null);
+      if (!CART_ITEMS) return;
+      setItems(JSON.parse(CART_ITEMS));
+    };
+
+    const getStoredAddress = () => {
+      const { SHIPPING_ADDRESS } = nookies.get(null);
+      if (!SHIPPING_ADDRESS) return;
+      setShippingAddress(JSON.parse(SHIPPING_ADDRESS));
+    };
+
+    const getPaymentMethod = () => {
+      const { PAYMENT_METHOD } = nookies.get(null);
+      if (!PAYMENT_METHOD) return;
+      setPaymentMethod(PAYMENT_METHOD);
+    };
+
+    getStoredItems();
+    getStoredAddress();
+    getPaymentMethod();
   }, []);
 
   return (
     <CartContext.Provider
-      value={{ items, addToCart, updateProductQty, deleteFromCart, cleanCart }}
+      value={{
+        items,
+        addToCart,
+        updateProductQty,
+        deleteFromCart,
+        clearCart,
+        changeAddress,
+        shippingAddress,
+        savePaymentMethod,
+        paymentMethod,
+      }}
     >
       {children}
     </CartContext.Provider>

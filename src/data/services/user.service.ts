@@ -1,4 +1,6 @@
+import nookies from 'nookies';
 import { API_URL } from '../../utils/constants';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { AuthInfo } from '../entities/auth-info.entity';
 import { User } from '../entities/user.entity';
 
@@ -29,6 +31,26 @@ class UserSerivce {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dto),
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    return data;
+  }
+
+  async update(dto: UpdateUserDto): Promise<AuthInfo> {
+    const { USER_TOKEN } = nookies.get(null);
+
+    if (!USER_TOKEN) throw new Error('Unauthorized request');
+
+    const res = await fetch(`${API_URL}/auth/update`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + USER_TOKEN,
       },
       body: JSON.stringify(dto),
     });

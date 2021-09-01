@@ -15,4 +15,6 @@ export type Order = {
   totalPrice: number;
   paidAt?: Date;
   deliveredAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };

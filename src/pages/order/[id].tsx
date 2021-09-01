@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
 import Image from 'next/image';
@@ -24,6 +24,8 @@ import {
   ScriptReducerAction,
   usePayPalScriptReducer,
 } from '@paypal/react-paypal-js';
+import { useSnackbar } from 'notistack';
+import { format } from 'date-fns';
 
 import { Layout } from '../../components/Layout';
 import { userService } from '../../data/services/user.service';
@@ -31,8 +33,6 @@ import { useStyles } from '../../styles/styles';
 import { getError } from '../../utils/error';
 import { orderService } from '../../data/services/order.service';
 import { Order } from '../../data/entities/order.entity';
-import { useState } from 'react';
-import { useSnackbar } from 'notistack';
 
 type OrderDetailsProps = {
   order?: Order;
@@ -139,8 +139,11 @@ export default function OrderDetails({
                     </ListItem>
                     <ListItem>
                       <Typography>Status:</Typography>
-                      {order.isPaid ? (
-                        `paid at ${order.paidAt?.toString()}`
+                      {order.isPaid && order.paidAt ? (
+                        <Typography>
+                          &nbsp;paid at{' '}
+                          {format(new Date(order.paidAt), 'MM/dd/yyyy HH:mm')}
+                        </Typography>
                       ) : (
                         <Typography className={errorStyle}>
                           &nbsp;not paid

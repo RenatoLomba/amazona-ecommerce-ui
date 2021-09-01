@@ -105,9 +105,11 @@ export const Layout: FC<LayoutProps> = ({
                     open={Boolean(anchorEl)}
                     onClose={loginMenuCloseHandler}
                   >
-                    <MenuItem onClick={loginMenuCloseHandler}>Profile</MenuItem>
-                    <MenuItem onClick={loginMenuCloseHandler}>
-                      My account
+                    <MenuItem onClick={() => router.push('/profile')}>
+                      Profile
+                    </MenuItem>
+                    <MenuItem onClick={() => router.push('/order')}>
+                      Order History
                     </MenuItem>
                     <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                   </Menu>

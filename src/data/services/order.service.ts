@@ -29,6 +29,24 @@ class OrderService {
     return data;
   }
 
+  async getOrders(token?: string): Promise<Order[]> {
+    const { USER_TOKEN } = nookies.get(null);
+
+    if (!USER_TOKEN && !token) throw new Error('Unauthorized request');
+
+    const res = await fetch(`${API_URL}/orders`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token || USER_TOKEN,
+      },
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    return data;
+  }
+
   async getUserOrder(id: string, token?: string): Promise<Order> {
     const { USER_TOKEN } = nookies.get(null);
 

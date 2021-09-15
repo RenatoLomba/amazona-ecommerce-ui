@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import nookies from 'nookies';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
 
-import { Layout } from '../../components/Layout';
 import {
   Card,
   Grid,
@@ -12,6 +11,7 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core';
+import { Bar } from 'react-chartjs-2';
 import { useStyles } from '../../styles/styles';
 import { SalesCard } from '../../components/dashboard/sales-card';
 import { OrdersCard } from '../../components/dashboard/orders-card';
@@ -19,6 +19,10 @@ import { ProductsCard } from '../../components/dashboard/products-card';
 import { UsersCard } from '../../components/dashboard/users-card';
 import { userService } from '../../data/services/user.service';
 import { getError } from '../../utils/error';
+import { Layout } from '../../components/layout';
+import { requestHelper } from '../../utils/request-helper';
+import { useSnackbar } from 'notistack';
+import { SalesChart } from '../../components/dashboard/sales-chart';
 
 export default function AdminDashboard() {
   const { section } = useStyles();
@@ -66,7 +70,9 @@ export default function AdminDashboard() {
                   Sales Chart
                 </Typography>
               </ListItem>
-              <ListItem>implement sales chart</ListItem>
+              <ListItem>
+                <SalesChart />
+              </ListItem>
             </List>
           </Card>
         </Grid>

@@ -13,10 +13,10 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/layout';
 import { CartItem } from '../data/entities/cart-item.entity';
 import { userService } from '../data/services/user.service';
-import { CheckOutWizard } from '../components/CheckOutWizard';
+import { CheckOutWizard } from '../components/checkout-wizard';
 import { useStyles } from '../styles/styles';
 import { useSnackbar } from 'notistack';
 import { useCart } from '../hooks/useCart';

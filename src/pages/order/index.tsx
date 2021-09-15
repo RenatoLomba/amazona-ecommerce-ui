@@ -3,7 +3,7 @@ import nookies from 'nookies';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
 
-import { Layout } from '../../components/Layout';
+import { Layout } from '../../components/layout';
 import { userService } from '../../data/services/user.service';
 import { orderService } from '../../data/services/order.service';
 import { Order } from '../../data/entities/order.entity';

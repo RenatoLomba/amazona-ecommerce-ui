@@ -163,7 +163,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: { orders },
     };
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     return {
       redirect: { destination: '/login?redirect=order', permanent: true },
     };

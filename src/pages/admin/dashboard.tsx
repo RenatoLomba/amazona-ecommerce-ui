@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import nookies from 'nookies';
 import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
@@ -11,7 +11,6 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core';
-import { Bar } from 'react-chartjs-2';
 import { useStyles } from '../../styles/styles';
 import { SalesCard } from '../../components/dashboard/sales-card';
 import { OrdersCard } from '../../components/dashboard/orders-card';
@@ -20,8 +19,6 @@ import { UsersCard } from '../../components/dashboard/users-card';
 import { userService } from '../../data/services/user.service';
 import { getError } from '../../utils/error';
 import { Layout } from '../../components/layout';
-import { requestHelper } from '../../utils/request-helper';
-import { useSnackbar } from 'notistack';
 import { SalesChart } from '../../components/dashboard/sales-chart';
 
 export default function AdminDashboard() {

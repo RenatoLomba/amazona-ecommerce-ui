@@ -5,7 +5,7 @@ export type Order = {
   isDelivered: boolean;
   isPaid: boolean;
   _id: string;
-  user: string;
+  user: { _id: string; name: string };
   orderItems: OrderItem[];
   shippingAddress: ShippingAddress;
   paymentMethod: string;

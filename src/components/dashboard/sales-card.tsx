@@ -3,6 +3,7 @@ import { requestHelper } from '../../utils/request-helper';
 import { getError } from '../../utils/error';
 import { useSnackbar } from 'notistack';
 import { DashboardCard } from './dashboard-card';
+import { currencyFormatter } from '../../utils/currency-formatter';
 
 const SalesCard = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -10,11 +11,6 @@ const SalesCard = () => {
   const [ordersPrice, setOrdersPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-
-  const currencyFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  });
 
   const fetchData = async () => {
     closeSnackbar();

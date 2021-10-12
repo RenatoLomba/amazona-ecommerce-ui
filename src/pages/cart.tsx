@@ -18,7 +18,7 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/layout';
 import { useCart } from '../hooks/useCart';
 import { useRouter } from 'next/router';
 

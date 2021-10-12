@@ -27,7 +27,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { format } from 'date-fns';
 
-import { Layout } from '../../components/Layout';
+import { Layout } from '../../components/layout';
 import { userService } from '../../data/services/user.service';
 import { useStyles } from '../../styles/styles';
 import { getError } from '../../utils/error';

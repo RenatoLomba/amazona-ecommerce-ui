@@ -11,13 +11,13 @@ import {
 import nookies from 'nookies';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/layout';
 import { useStyles } from '../styles/styles';
 import { userService } from '../data/services/user.service';
 import { CartItem } from '../data/entities/cart-item.entity';
 import { useCart } from '../hooks/useCart';
 import { useEffect } from 'react';
-import { CheckOutWizard } from '../components/CheckOutWizard';
+import { CheckOutWizard } from '../components/checkout-wizard';
 
 type FormInput = {
   fullName: string;

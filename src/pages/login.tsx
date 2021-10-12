@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/layout';
 import { useStyles } from '../styles/styles';
 import { useRouter } from 'next/router';
 import { userService } from '../data/services/user.service';

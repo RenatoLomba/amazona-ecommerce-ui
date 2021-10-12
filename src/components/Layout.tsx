@@ -111,6 +111,11 @@ export const Layout: FC<LayoutProps> = ({
                     <MenuItem onClick={() => router.push('/order')}>
                       Order History
                     </MenuItem>
+                    {loggedUser.isAdmin && (
+                      <MenuItem onClick={() => router.push('/admin/dashboard')}>
+                        Admin Dashboard
+                      </MenuItem>
+                    )}
                     <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                   </Menu>
                 </>

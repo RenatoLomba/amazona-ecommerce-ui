@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { Layout } from '../../components/Layout';
+import { Layout } from '../../components/layout';
 import { Product } from '../../data/entities/product.entity';
 import { productService } from '../../data/services/product.service';
 import { useStyles } from '../../styles/styles';
